@@ -6,7 +6,7 @@ from pathlib import Path
 # --- 配置区 ---
 DATA_DIR = './my_source_files'    # 存放 CSV/TXT 的源目录
 BUILD_DIR = './site_project'      # MkDocs 项目生成目录
-SITE_NAME = "极简大数据管理器"
+SITE_NAME = "qlib csi300 score"
 
 def setup_project():
     """初始化 MkDocs 项目结构并配置 yml"""
