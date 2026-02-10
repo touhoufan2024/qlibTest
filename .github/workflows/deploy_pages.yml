@@ -1,0 +1,34 @@
+name: 2-部署 MkDocs 网页
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'my_source_files/**' # 监听数据目录
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 运行 MkDocs 构建脚本
+        run: python build_manager.py
+
+      - name: 部署到 GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site_project/site
