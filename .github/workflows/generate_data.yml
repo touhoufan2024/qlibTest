@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 必须设置为 0，获取完整历史才能进行分支合并
 
       - name: 设置 Python
         uses: actions/setup-python@v5
@@ -28,15 +30,28 @@ jobs:
 
       - name: 提交并推送文件
         run: |
-          git checkout -B qlib_score_csv
-          git pull origin main --rebase
+          # 1. 配置 Git 身份
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 2. 切换到数据分支
+          # 如果远程已有该分支则同步，如果没有则基于当前 main 创建
+          if git fetch origin qlib_score_csv; then
+            git checkout qlib_score_csv
+            git pull origin qlib_score_csv
+            # 关键：同步 main 分支的最新代码改动，-X theirs 表示冲突时以 main 为准
+            git merge origin/main -X theirs -m "Sync code from main" --allow-unrelated-histories
+          else
+            git checkout -b qlib_score_csv
+          fi
+          
+          # 3. 添加生成的数据文件
           git add my_source_files/
-          # 检查是否有文件变动，防止空提交报错
+          
+          # 4. 检查变动并推送
           if git diff --cached --quiet; then
             echo "没有新文件生成。"
           else
-            git commit -m "自动更新: $(date +'%Y-%m-%d %H:%M:%S')"
+            git commit -m "自动更新数据及同步代码: $(date +'%Y-%m-%d %H:%M:%S')"
             git push origin qlib_score_csv
           fi
