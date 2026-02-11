@@ -20,9 +20,9 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
-
-      - name: 切换分支
-        run: git checkout qlib_score_csv
+        with:
+          ref: qlib_score_csv  # 关键：确保检出的是存放数据的分支
+          fetch-depth: 0
 
       - name: 设置 Python
         uses: actions/setup-python@v5
