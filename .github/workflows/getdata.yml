@@ -17,7 +17,6 @@ jobs:
           # 2. 解压文件
           echo ">>> 正在解压数据..."
           mkdir -p ~/.qlib/qlib_data/cn_data
-          ls -R ~/.qlib/qlib_data/cn_data
 
           tar -zxvf qlib_bin.tar.gz -C ~/.qlib/qlib_data/cn_data --strip-components=1
           
