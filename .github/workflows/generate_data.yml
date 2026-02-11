@@ -23,14 +23,12 @@ jobs:
       - name: 安装基础依赖
         run: pip install pandas numpy
 
-      - name: 切换分支
-        run: git checkout -B qlib_score_csv
-
       - name: 执行生成脚本
         run: python fetch_data.py
 
       - name: 提交并推送文件
         run: |
+          git checkout -B qlib_score_csv
           git pull origin qlib_score_csv --rebase
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
