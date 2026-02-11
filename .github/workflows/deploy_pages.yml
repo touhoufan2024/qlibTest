@@ -3,7 +3,7 @@ name: 2-部署 MkDocs 网页
 on:
   workflow_dispatch:      # 手动触发
   push:
-    branches: [ main ]
+    branches: [ qlib_score_csv ] # 监听数据分支
     paths:
       - 'my_source_files/**' # 监听数据目录
   workflow_run:
