@@ -14,8 +14,9 @@ jobs:
           # 1. 下载名为 qlib_bin.tar.gz 的附件到当前目录
           gh release download --repo chenditc/investment_data --pattern "qlib_bin.tar.gz"
 
-          # 2. 解压文件 (假设解压到当前目录)
+          # 2. 解压文件
           echo ">>> 正在解压数据..."
+          mkdir -p /home/runner/.qlib/qlib_data/
           tar -zxvf qlib_bin.tar.gz -C ~/.qlib/qlib_data/cn_data --strip-components=1
           
           # 3. 验证解压后的内容
