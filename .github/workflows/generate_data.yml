@@ -23,6 +23,9 @@ jobs:
       - name: 安装基础依赖
         run: pip install pandas numpy
 
+      - name: 切换分支
+        run: git checkout -B qlib_score_csv
+
       - name: 执行生成脚本
         run: python fetch_data.py
 
