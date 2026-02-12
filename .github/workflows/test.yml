@@ -1,0 +1,43 @@
+name: 验证虚拟机控制权限
+
+on:
+  workflow_dispatch: # 允许你手动点击运行
+
+jobs:
+  check-home-access:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. 证明当前路径和用户
+        run: |
+          echo "当前用户是: $(whoami)"
+          echo "默认工作目录是: $(pwd)"
+          echo "根目录权限列表:"
+          ls -ld /home
+
+      - name: 2. 操作 /home 目录 (模拟你的写死路径)
+        run: |
+          # 定义你要模拟的深层路径
+          TARGET_DIR="/home/ash/.qlibAssistant/mlruns/test_id/artifacts"
+          
+          echo ">>> 正在创建深层路径..."
+          sudo mkdir -p "$TARGET_DIR"
+          
+          echo ">>> 修改目录所有者为当前用户..."
+          sudo chown -R $USER:$USER /home/ash
+          
+          echo ">>> 写入测试模型数据..."
+          echo "This is a dummy pkl content" > "$TARGET_DIR/model.pkl"
+          echo "Success: 文件已写入到 $TARGET_DIR/model.pkl"
+
+      - name: 3. 打印结果以证明操作成功
+        run: |
+          echo "--- 验证步骤 ---"
+          
+          echo "检查目录是否存在:"
+          [ -d "/home/ash/.qlibAssistant/mlruns/test_id/artifacts" ] && echo "✅ 目录已成功创建" || echo "❌ 目录不存在"
+          
+          echo "读取写入的文件内容:"
+          cat /home/ash/.qlibAssistant/mlruns/test_id/artifacts/model.pkl
+          
+          echo "查看最终的目录树结构:"
+          ls -R /home/ash
